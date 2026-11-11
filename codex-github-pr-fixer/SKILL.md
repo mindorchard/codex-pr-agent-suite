@@ -19,7 +19,7 @@ it does not by itself authorize a commit, push, or GitHub comment.
 
 ## Modes
 
-- **Loop mode**: used by `$codex-pr-review-loop`. Edit the current task
+- **Loop mode**: used by `$pr-loop`. Edit the current task
   worktree only. Do not commit, push, post GitHub comments, resolve threads,
   or trigger CI. Return the structured handoff in
   `references/fix-contract.md`.

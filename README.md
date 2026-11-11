@@ -6,7 +6,7 @@
 
 - `codex-github-pr-reviewer`：只读审查单个 PR，输出结构化问题清单。
 - `codex-github-pr-fixer`：根据已验证问题在当前 checkout 修复并运行测试。
-- `codex-pr-review-loop`：协调 reviewer → fixer → reviewer 循环，直到收敛或明确阻塞。
+- `pr-loop`：协调 reviewer → fixer → reviewer 循环，直到收敛或明确阻塞。
 
 ## 安装
 
@@ -15,7 +15,7 @@
 
 ```bash
 SKILL_ROOT="${CODEX_HOME:-$HOME/.codex}/skills"
-cp -R codex-github-pr-reviewer codex-github-pr-fixer codex-pr-review-loop "$SKILL_ROOT/"
+cp -R codex-github-pr-reviewer codex-github-pr-fixer pr-loop "$SKILL_ROOT/"
 ```
 
 安装后重启 Codex 或新建会话，让 skill 清单重新加载。
@@ -32,7 +32,7 @@ Use $codex-github-pr-fixer to repair the verified findings in owner/repo #123.
 协调运行：
 
 ```text
-Use $codex-pr-review-loop to review and repair owner/repo #123 until it converges.
+Use $pr-loop to review and repair owner/repo #123 until it converges.
 ```
 
 默认只修改本地工作区，不提交、不推送、不发 GitHub 评论。只有用户明确要求

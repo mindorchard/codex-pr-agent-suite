@@ -14,7 +14,7 @@ intuition are leads—not proof.
 
 This skill is deliberately read-only. In standalone use, a user may explicitly
 ask for a GitHub `COMMENT` review after the analysis is complete. When invoked
-by `$codex-pr-review-loop`, do not edit files, commit, push, resolve threads,
+by `$pr-loop`, do not edit files, commit, push, resolve threads,
 or publish GitHub comments; return the structured report described in
 `references/review-contract.md`.
 

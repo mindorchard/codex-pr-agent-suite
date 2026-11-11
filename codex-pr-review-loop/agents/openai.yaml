@@ -1,5 +1,0 @@
-interface:
-  display_name: "Codex · PR Review–Fix Loop"
-  short_description: "Coordinate bounded PR review–fix–re-review loops."
-  default_prompt: "Use $codex-pr-review-loop to coordinate review and repair of this pull request until it converges or is blocked."
-

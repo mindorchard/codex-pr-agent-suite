@@ -1,5 +1,5 @@
 ---
-name: codex-pr-review-loop
+name: pr-loop
 description: "Coordinate a bounded Codex review–fix–re-review loop for one GitHub pull request, using a reviewer and fixer agent with explicit handoff contracts until findings are resolved or a blocker is reached."
 metadata:
   short-description: "Coordinate PR review and repair agents"
@@ -19,7 +19,7 @@ agent identity: agent IDs and their contexts exist only for the current run.
 
 ## Invocation
 
-Use `$codex-pr-review-loop` with `owner/repo #number` or a PR URL. Optional
+Use `$pr-loop` with `owner/repo #number` or a PR URL. Optional
 parameters may be stated in the request:
 
 - `max_rounds`: maximum review/fix cycles; default `5`.
