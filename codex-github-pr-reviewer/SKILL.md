@@ -1,6 +1,6 @@
 ---
 name: codex-github-pr-reviewer
-description: "Review one GitHub pull request from Codex using the live PR head, local checkout, and GitHub discussion; emit evidence-based findings for a user or a review–fix loop. Do not edit code or push."
+description: "Review one GitHub pull request from Codex using the live PR head, local checkout, and GitHub discussion; emit evidence-based findings for a user or a review–fix loop. Never edit code, commit, or push; in a published loop, post the verified findings as PR threads."
 metadata:
   short-description: "Evidence-based Codex PR review"
 ---
@@ -12,11 +12,14 @@ current checkout, repository instructions, and reproducible evidence are the
 source of truth. Prior comments, another agent's summary, and a reviewer's
 intuition are leads—not proof.
 
-This skill is deliberately read-only. In standalone use, a user may explicitly
-ask for a GitHub `COMMENT` review after the analysis is complete. When invoked
-by `$pr-loop`, do not edit files, commit, push, resolve threads,
-or publish GitHub comments; return the structured report described in
-`references/review-contract.md`.
+This skill is deliberately read-only with respect to the checkout. In
+standalone use, a user may explicitly ask for a GitHub `COMMENT` review after
+the analysis is complete. When invoked by `$pr-loop`, do not edit files,
+commit, push, or resolve threads. If the coordinator sets `publish=true`, post
+the verified findings as concise GitHub review threads and return the thread
+metadata in the structured report described in
+`references/review-contract.md`; with `publish=false`, return a draft without
+posting.
 
 Treat `GPR owner/repo #123` and `GPR https://github.com/owner/repo/pull/123`
 as explicit shorthand for this workflow. The shorthand selects the workflow;
@@ -49,11 +52,13 @@ it does not grant publication or repository-write permission.
    ran and distinguish local tests, static reasoning, simulated DOM tests,
    real-browser tests, and pre-existing CI results. Do not dispatch, rerun, or
    modify CI workflows.
-6. Immediately before a standalone publication, refresh the PR head and the
-   affected code. If the head changed, re-review the affected findings instead
-   of attaching stale comments. Publish at most one concise review and only
-   when the user explicitly authorized publication. Never approve or request
-   changes unless explicitly requested and eligible.
+6. Immediately before publication, refresh the PR head and the affected code.
+   If the head changed, re-review the affected findings instead of attaching
+   stale comments. In a published `$pr-loop` round, publish at most one
+   concise `COMMENT` review with one thread per verified actionable finding,
+   reusing the existing thread for the same finding. In standalone use,
+   publish only when the user explicitly authorized it. Never approve or
+   request changes unless explicitly requested and eligible.
 
 ## Codex-specific boundaries
 
@@ -64,6 +69,11 @@ it does not grant publication or repository-write permission.
   branch, or mutate the worktree as part of a review.
 - Do not treat a resolved/outdated comment or a prior fixer reply as evidence
   that the current head is correct.
+- In a published loop, treat the live PR threads as the durable conversation:
+  read them before reviewing, avoid duplicate findings, and report every
+  created or reused thread ID and URL. A thread post is not evidence that the
+  underlying finding is correct; the current head and local validation remain
+  authoritative.
 - A finding belongs in the report only when it has a credible execution path,
   user/developer impact, and evidence. Mark uncertainty explicitly.
 - Return one machine-readable report following

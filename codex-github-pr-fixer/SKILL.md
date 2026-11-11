@@ -1,6 +1,6 @@
 ---
 name: codex-github-pr-fixer
-description: "Repair verified GitHub pull request findings in a Codex checkout, add regression coverage, and report exact validation. In loop mode, edit only the shared worktree and never publish or push."
+description: "Repair verified GitHub pull request findings in a Codex checkout, add regression coverage, and report exact validation. In a published loop, reply on the finding threads and commit/push verified repairs; never write the default branch."
 metadata:
   short-description: "Safe, test-backed Codex PR repair"
 ---
@@ -15,14 +15,17 @@ testing conventions support it.
 
 Treat `GPF owner/repo #123` and `GPF https://github.com/owner/repo/pull/123`
 as explicit shorthand for this workflow. The shorthand selects the workflow;
-it does not by itself authorize a commit, push, or GitHub comment.
+standalone use does not by itself authorize a commit, push, or GitHub comment.
 
 ## Modes
 
-- **Loop mode**: used by `$pr-loop`. Edit the current task
-  worktree only. Do not commit, push, post GitHub comments, resolve threads,
-  or trigger CI. Return the structured handoff in
-  `references/fix-contract.md`.
+- **Loop mode**: used by `$pr-loop`. Edit the current task worktree only. The
+  coordinator supplies `publish=true` or `publish=false`. In published loop
+  mode, read the live finding threads, reply with the repair plan and tested
+  result, and commit/push one cohesive repair to the verified PR head branch
+  using a non-forced head check. In dry-run mode, do none of those external
+  writes. Never resolve threads or trigger CI. Return the structured handoff
+  in `references/fix-contract.md`.
 - **Standalone mode**: used when the user directly asks for a PR repair. A
   commit, push, thread reply, or final report is allowed only when the user has
   explicitly authorized that operation. Keep the same head and branch safety
@@ -47,9 +50,13 @@ it does not by itself authorize a commit, push, or GitHub comment.
    targeted tests first, then relevant type, lint, build, or broader tests that
    are feasible. Record exact commands and real outcomes.
 5. Inspect the final diff and status. Confirm that only intended files changed,
-   the current head did not move underneath the work, and no secrets or
-   generated noise were introduced. In loop mode leave the changes available
-   for the parent coordinator to review.
+   the expected PR head did not move underneath the work, and no secrets or
+   generated noise were introduced. In published loop mode, reply in each
+   relevant finding thread with the actual test/result summary, create one
+   cohesive commit, and push it non-forcibly to the verified PR head branch.
+   Confirm each result from tool output. In dry-run or isolated-worktree mode,
+   leave a precise patch handoff for the parent instead of claiming a commit or
+   push that did not occur.
 
 ## Safety rules
 
@@ -57,6 +64,9 @@ it does not by itself authorize a commit, push, or GitHub comment.
   default-branch write. Do not discard or overwrite user changes.
 - Do not manually dispatch or rerun CI. A normal push may start repository
   workflows; report that fact rather than promising that CI will not run.
+- In published loop mode, reply only in the mapped PR finding threads and
+  commit/push only after verifying the expected head, repository, and branch.
+  Use a normal non-forced push; if the head moved, stop and report the race.
 - Do not claim a test, commit, push, review reply, or changed worktree unless
   the corresponding tool result was actually observed.
 - If the runtime gives this agent an isolated worktree, do not claim the

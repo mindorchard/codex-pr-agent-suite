@@ -1,4 +1,4 @@
 interface:
   display_name: "Codex · PR Loop"
   short_description: "Coordinate bounded PR review–fix–re-review loops."
-  default_prompt: "Use $pr-loop to coordinate review and repair of this pull request until it converges or is blocked."
+  default_prompt: "Use $pr-loop to review and repair this pull request through GitHub PR threads, committing and pushing verified fixes until it converges or is blocked."

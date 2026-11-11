@@ -25,8 +25,19 @@ tool call alone as proof that the primary checkout contains the patch.
     "patch_path": null,
     "notes": "..."
   },
-  "commit": null,
-  "publish": { "pushed": false, "comments_posted": false }
+  "commit": {
+    "sha": "...",
+    "branch": "feature/example",
+    "message": "Fix verified PR findings",
+    "pushed": true
+  },
+  "publish": {
+    "pushed": true,
+    "comments_posted": true,
+    "thread_replies": [
+      { "thread_id": "...", "url": "...", "posted": true }
+    ]
+  }
 }
 ```
 
@@ -38,8 +49,11 @@ Allowed values:
   the agent used an isolated worktree. The parent must inspect/apply the patch
   and validate it before another review round.
 
-In loop mode, `commit` is `null`, `publish.pushed` is `false`, and
-`publish.comments_posted` is `false`. A `changed` result means only that the
+In loop mode with `publish=true`, a `changed` result must include the actual
+commit and push evidence plus the thread replies. `commit` may be `null` and
+the publication flags must be `false` only when the fixer used dry-run mode or
+an isolated worktree; the parent then has to apply, validate, commit, and push
+the patch before another GitHub review. A `changed` result means only that the
 agent made a change in the workspace it controlled; the coordinator still
-checks `git status`, the diff, the head, and the tests.
+checks `git status`, the diff, the head, the thread replies, and the tests.
 

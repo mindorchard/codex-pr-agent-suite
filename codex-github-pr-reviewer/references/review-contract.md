@@ -30,6 +30,19 @@ may accept a human-readable explanation after it, but the JSON is authoritative.
       "verification": "Test or invariant that should pass after repair"
     }
   ],
+  "discussion": {
+    "mode": "github_threads",
+    "posted": true,
+    "review_id": "...",
+    "threads": [
+      {
+        "finding_id": "F-001",
+        "thread_id": "...",
+        "url": "https://github.com/owner/repo/pull/123#discussion_r...",
+        "status": "created"
+      }
+    ]
+  },
   "verification": [
     { "command": "npm test -- ...", "status": "passed", "evidence": "..." }
   ],
@@ -42,6 +55,11 @@ Allowed values:
 - `verdict`: `clean`, `actionable`, `blocked`, or `needs_decision`.
 - Finding `status`: `needs_fix`, `already_fixed`, `not_reproducible`,
   `needs_decision`, or `blocked`.
+- `discussion.mode` is `github_threads` for a published loop and
+  `local_draft` for a dry run. `discussion.posted` must reflect the actual
+  tool result. Each actionable finding in a published loop must have a created
+  or reused thread entry; a missing thread is a publication failure, not proof
+  that the finding is invalid.
 - `severity`: `P0`, `P1`, `P2`, or `P3`. Use a severity only when the impact
   is supported by evidence.
 - Verification `status`: `passed`, `failed`, `not_run`, or `blocked`.

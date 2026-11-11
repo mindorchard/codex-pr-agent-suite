@@ -35,11 +35,13 @@ Use $codex-github-pr-fixer to repair the verified findings in owner/repo #123.
 Use $pr-loop to review and repair owner/repo #123 until it converges.
 ```
 
-默认只修改本地工作区，不提交、不推送、不发 GitHub 评论。只有用户明确要求
-发布时，才把 `publish=true` 作为协调器的权限条件；最终提交和推送仍由父级
-协调器做一次性安全检查。
+`pr-loop` 默认通过 GitHub PR threads 让 reviewer 和 fixer 两个独立 agent
+交流：reviewer 发布 findings，fixer 在对应 thread 回复、修复、提交并推送，
+协调器验证 head 后发布最终状态。需要纯本地演练时显式指定 `publish=false`；
+此时不提交、不推送、不发评论。
 
 Codex 的持久复用单位是 skill；agent ID 和上下文是运行时对象。因此协调器
-skill 会在当前任务中使用 Codex 的多 agent 原语创建/复用两个临时角色，并通过
-JSON handoff 交接 `head_sha`、发现、变更和测试证据。
+skill 会在当前任务中使用 Codex 的多 agent 原语创建/复用两个临时角色，并以
+PR threads 作为 durable handoff，同时用 JSON 交接 `head_sha`、发现、变更和
+测试证据。
 
