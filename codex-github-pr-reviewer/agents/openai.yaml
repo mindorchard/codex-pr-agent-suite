@@ -1,0 +1,5 @@
+interface:
+  display_name: "Codex · GitHub PR Reviewer"
+  short_description: "Review PRs with evidence and structured findings."
+  default_prompt: "Use $codex-github-pr-reviewer to review this pull request and return structured, evidence-based findings."
+

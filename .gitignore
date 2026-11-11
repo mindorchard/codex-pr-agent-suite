@@ -1,0 +1,3 @@
+# Windows download metadata; keep the actual archives but not sidecar streams.
+*:Zone.Identifier
+

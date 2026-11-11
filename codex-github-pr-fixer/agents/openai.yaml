@@ -1,0 +1,5 @@
+interface:
+  display_name: "Codex · GitHub PR Fixer"
+  short_description: "Fix verified PR findings locally and verify each change."
+  default_prompt: "Use $codex-github-pr-fixer to repair the verified pull request findings in the current checkout and report actual tests."
+
